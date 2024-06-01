@@ -72,9 +72,11 @@ func isExecutable(cmd string, path string) (string, bool) {
 	//fmt.Printf("PATH: %s\n", path)
 	dirs := strings.Split(path, ":")
 	for _, d := range dirs {
+		//fmt.Printf("dir: %s\n", d)
 		items, _ := os.ReadDir(d)
 		for _, item := range items {
-			if item.Type().IsRegular() && item.Name() == cmd {
+			//fmt.Printf("item: %v\n", item)
+			if item.Name() == cmd {
 				return d, true
 			}
 		}
