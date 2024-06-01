@@ -26,6 +26,13 @@ func main() {
 		//args := parts[1:]
 
 		switch cmd {
+		case "type":
+			arg := parts[1]
+			if isBuiltin(arg) {
+				fmt.Printf("%s is a shell builtin\n", arg)
+			} else {
+				fmt.Printf("%s not found\n", arg)
+			}
 		case "exit":
 			args := parts[1:]
 			n, err := strconv.Atoi(args[0])
@@ -43,5 +50,18 @@ func main() {
 		default:
 			fmt.Printf("%s: command not found\n", cmd)
 		}
+	}
+}
+
+func isBuiltin(cmd string) bool {
+	switch cmd {
+	case "echo":
+		return true
+	case "exit":
+		return true
+	case "type":
+		return true
+	default:
+		return false
 	}
 }
