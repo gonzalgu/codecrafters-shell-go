@@ -35,7 +35,9 @@ func main() {
 			}
 			os.Exit(n)
 		case "echo":
-			fmt.Printf("echo received\n")
+			args := parts[1:]
+			echoLine := strings.Join(args, " ")
+			fmt.Printf("%s\n", echoLine)
 		case "cd":
 			fmt.Printf("cd received\n")
 		default:
