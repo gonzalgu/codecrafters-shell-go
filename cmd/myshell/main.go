@@ -30,8 +30,10 @@ func main() {
 			arg := parts[1]
 			if isBuiltin(arg) {
 				fmt.Printf("%s is a shell builtin\n", arg)
+			} else if path, ok := isExecutable(arg, os.Getenv("PATH")); ok {
+				fmt.Printf("%s is %s/%s\n", arg, path, arg)
 			} else {
-				fmt.Printf("%s not found\n", arg)
+				fmt.Printf("%s: command not found\n", arg)
 			}
 		case "exit":
 			args := parts[1:]
@@ -64,4 +66,18 @@ func isBuiltin(cmd string) bool {
 	default:
 		return false
 	}
+}
+
+func isExecutable(cmd string, path string) (string, bool) {
+	//fmt.Printf("PATH: %s\n", path)
+	dirs := strings.Split(path, ":")
+	for _, d := range dirs {
+		items, _ := os.ReadDir(d)
+		for _, item := range items {
+			if item.Type().IsRegular() && item.Name() == cmd {
+				return d, true
+			}
+		}
+	}
+	return "", false
 }
