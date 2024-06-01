@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -14,12 +16,24 @@ func main() {
 		// Uncomment this block to pass the first stage
 		fmt.Fprint(os.Stdout, "$ ")
 		// Wait for user input
-		cmd, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		line, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		if err != nil {
 			fmt.Printf("error reading from input: %v", err)
 		}
-		cmd = cmd[:len(cmd)-1]
+		line = line[:len(line)-1]
+		parts := strings.Split(line, " ")
+		cmd := parts[0]
+		//args := parts[1:]
+
 		switch cmd {
+		case "exit":
+			args := parts[1:]
+			n, err := strconv.Atoi(args[0])
+			if err != nil {
+				fmt.Printf("error parsing argument: %v", err)
+				os.Exit(-1)
+			}
+			os.Exit(n)
 		case "echo":
 			fmt.Printf("echo received\n")
 		case "cd":
