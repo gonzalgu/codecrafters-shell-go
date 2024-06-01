@@ -33,7 +33,7 @@ func main() {
 			} else if path, ok := isExecutable(arg, os.Getenv("PATH")); ok {
 				fmt.Printf("%s is %s/%s\n", arg, path, arg)
 			} else {
-				fmt.Printf("%s: command not found\n", arg)
+				fmt.Printf("%s: not found\n", arg)
 			}
 		case "exit":
 			args := parts[1:]
