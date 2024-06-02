@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -20,9 +21,13 @@ func main() {
 		if err != nil {
 			fmt.Printf("error reading from input: %v", err)
 		}
+
 		line = line[:len(line)-1]
 		parts := strings.Split(line, " ")
 		cmd := parts[0]
+		if cmd == "" {
+			continue
+		}
 		//args := parts[1:]
 
 		switch cmd {
@@ -50,7 +55,8 @@ func main() {
 		case "cd":
 			fmt.Printf("cd received\n")
 		default:
-			fmt.Printf("%s: command not found\n", cmd)
+			runCommand(cmd, parts[1:])
+			//fmt.Printf("%s: command not found\n", cmd)
 		}
 	}
 }
@@ -66,6 +72,23 @@ func isBuiltin(cmd string) bool {
 	default:
 		return false
 	}
+}
+
+func runCommand(fullCmd string, args []string) {
+	cmdArray := strings.Split(fullCmd, "/")
+	cmd := cmdArray[len(cmdArray)-1]
+	if path, ok := isExecutable(cmd, os.Getenv("PATH")); ok {
+		fullCmd := path + "/" + cmd
+		command := exec.Command(fullCmd, args...)
+		stdout, err := command.Output()
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Print(string(stdout))
+	} else {
+		fmt.Printf("%s: command not found\n", cmd)
+	}
+
 }
 
 func isExecutable(cmd string, path string) (string, bool) {
