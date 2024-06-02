@@ -54,6 +54,12 @@ func main() {
 			fmt.Printf("%s\n", echoLine)
 		case "cd":
 			fmt.Printf("cd received\n")
+		case "pwd":
+			dir, err := os.Getwd()
+			if err != nil {
+				fmt.Printf("error finding current dir: %s\n", err)
+			}
+			fmt.Println(dir)
 		default:
 			runCommand(cmd, parts[1:])
 			//fmt.Printf("%s: command not found\n", cmd)
