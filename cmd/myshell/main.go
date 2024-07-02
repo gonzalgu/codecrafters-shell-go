@@ -53,7 +53,11 @@ func main() {
 			echoLine := strings.Join(args, " ")
 			fmt.Printf("%s\n", echoLine)
 		case "cd":
-			fmt.Printf("cd received\n")
+			path := parts[1]
+			err := os.Chdir(path)
+			if err != nil {
+				fmt.Printf("cd: %s: No such file or directory\n", path)
+			}
 		case "pwd":
 			dir, err := os.Getwd()
 			if err != nil {
@@ -74,6 +78,8 @@ func isBuiltin(cmd string) bool {
 	case "exit":
 		return true
 	case "type":
+		return true
+	case "pwd":
 		return true
 	default:
 		return false
